@@ -1,0 +1,2721 @@
+[gd_scene load_steps=11 format=2]
+
+[sub_resource type="GDScript" id=1]
+script/source = "extends Area
+
+var bodies={}
+export var forcevector = Vector3(0.0,1.0,0.0)
+export var force = 1000
+
+func _physics_process(_delta):
+	for body in bodies.values():
+		if(isFirstIntersectionWithAWindArea(body)):
+			body.add_force(forcevector*force, Vector3(0,0,0))
+		pass
+	pass
+
+func isFirstIntersectionWithAWindArea(body):
+	var result = get_world().direct_space_state.intersect_ray(body.translation, forcevector*-1,[body])
+	if result.empty() :
+		return true
+		
+	if result[\"collider\"].is_in_group(\"blocksWind\") or result[\"collider\"].is_in_group(\"blocksWind\") :
+		return false
+	else:
+		return true
+
+func _on_WindArea_body_entered(body):
+	if body.is_in_group(\"wind\"):
+		bodies[body.name] = body
+	pass # Replace with function body.
+
+
+func _on_WindArea_body_exited(body):
+	if body.is_in_group(\"wind\"):
+		bodies.erase(body.name)
+	pass # Replace with function body.
+"
+
+[sub_resource type="BoxShape" id=2]
+extents = Vector3( 24.785, 40.0441, 24.5307 )
+
+[sub_resource type="BoxShape" id=3]
+extents = Vector3( 1.00984, 1.01106, 1 )
+
+[sub_resource type="CubeMesh" id=4]
+
+[sub_resource type="SpatialMaterial" id=5]
+albedo_color = Color( 0.258824, 0.905882, 0, 1 )
+
+[sub_resource type="SpatialMaterial" id=6]
+albedo_color = Color( 0.980392, 0, 0, 1 )
+
+[sub_resource type="BoxShape" id=7]
+extents = Vector3( 12.7376, 1.51441, 11.1328 )
+
+[sub_resource type="SpatialMaterial" id=8]
+albedo_color = Color( 0.121569, 0.160784, 0.152941, 1 )
+
+[sub_resource type="PlaneMesh" id=9]
+material = SubResource( 8 )
+size = Vector2( 50, 50 )
+
+[sub_resource type="BoxShape" id=10]
+extents = Vector3( 119.529, 1.26253, 106.532 )
+
+[node name="Main" type="Spatial"]
+
+[node name="SimpleWindArea" type="Area" parent="." groups=[
+"WindArea",
+]]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 4.63078, 2.0894, 3.92703 )
+script = SubResource( 1 )
+
+[node name="CollisionShape" type="CollisionShape" parent="SimpleWindArea"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -4.66825, 1.70264, -1.68796 )
+shape = SubResource( 2 )
+
+[node name="WindBlownBody" type="RigidBody" parent="." groups=[
+"wind",
+]]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.669582, 13.135, 6.44597 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="WindBlownBody"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="WindBlownBody"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="Affected Bodies" type="Spatial" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.669582, 13.135, 6.44597 )
+
+[node name="WindBlownBody2" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 0.678121, 0.73495, 0, -0.38929, 0.359189, -0.848196, -0.623382, 0.57518, 0.529682, 1.69544, 22.0354, -25.8191 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody2"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody2"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody4" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 26.9522, -7.73582 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody4"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody4"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody3" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 0.678121, 0.73495, 0, -0.38929, 0.359189, -0.848196, -0.623382, 0.57518, 0.529682, 1.69544, 22.0354, -25.8191 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody3"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody3"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody6" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 26.9522, -7.73582 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody6"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody6"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody5" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 0.678121, 0.73495, 0, -0.38929, 0.359189, -0.848196, -0.623382, 0.57518, 0.529682, 1.69544, 22.0354, -25.8191 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody5"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody5"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody8" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody8"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody8"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody7" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 0.678121, 0.73495, 0, -0.38929, 0.359189, -0.848196, -0.623382, 0.57518, 0.529682, 1.69544, -4.91677, -18.0833 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody7"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody7"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody16" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4.1268 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody16"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody16"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody15" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 0.678121, 0.73495, 0, -0.38929, 0.359189, -0.848196, -0.623382, 0.57518, 0.529682, 1.69544, 22.0354, -29.9459 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody15"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody15"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody14" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 26.9522, -11.8626 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody14"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody14"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody13" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 0.678121, 0.73495, 0, -0.38929, 0.359189, -0.848196, -0.623382, 0.57518, 0.529682, 1.69544, 22.0354, -29.9459 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody13"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody13"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody12" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 26.9522, -11.8626 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody12"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody12"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody11" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 0.678121, 0.73495, 0, -0.38929, 0.359189, -0.848196, -0.623382, 0.57518, 0.529682, 1.69544, 22.0354, -29.9459 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody11"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody11"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody10" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4.1268 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody10"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody10"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody9" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 0.678121, 0.73495, 0, -0.38929, 0.359189, -0.848196, -0.623382, 0.57518, 0.529682, 1.69544, -4.91677, -22.2101 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody9"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody9"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody24" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 18.8608, -4.1268 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody24"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody24"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody23" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 0.678121, 0.73495, 0, -0.38929, 0.359189, -0.848196, -0.623382, 0.57518, 0.529682, 1.69544, 40.8962, -29.9459 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody23"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody23"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody22" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 45.8129, -11.8626 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody22"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody22"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody21" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 0.678121, 0.73495, 0, -0.38929, 0.359189, -0.848196, -0.623382, 0.57518, 0.529682, 1.69544, 40.8962, -29.9459 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody21"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody21"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody20" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 45.8129, -11.8626 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody20"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody20"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody19" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 0.678121, 0.73495, 0, -0.38929, 0.359189, -0.848196, -0.623382, 0.57518, 0.529682, 1.69544, 40.8962, -29.9459 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody19"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody19"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody18" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 18.8608, -4.1268 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody18"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody18"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody17" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 0.678121, 0.73495, 0, -0.38929, 0.359189, -0.848196, -0.623382, 0.57518, 0.529682, 1.69544, 13.944, -22.2101 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody17"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody17"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody32" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 35.1017, -4.1268 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody32"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody32"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody31" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 0.678121, 0.73495, 0, -0.38929, 0.359189, -0.848196, -0.623382, 0.57518, 0.529682, 1.69544, 57.1371, -29.9459 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody31"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody31"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody30" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 62.0539, -11.8626 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody30"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody30"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody29" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 0.678121, 0.73495, 0, -0.38929, 0.359189, -0.848196, -0.623382, 0.57518, 0.529682, 1.69544, 57.1371, -29.9459 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody29"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody29"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody28" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 62.0539, -11.8626 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody28"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody28"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody27" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 0.678121, 0.73495, 0, -0.38929, 0.359189, -0.848196, -0.623382, 0.57518, 0.529682, 1.69544, 57.1371, -29.9459 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody27"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody27"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody26" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 35.1017, -4.1268 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody26"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody26"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody25" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 0.678121, 0.73495, 0, -0.38929, 0.359189, -0.848196, -0.623382, 0.57518, 0.529682, 1.69544, 30.1849, -22.2101 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody25"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody25"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody40" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 42.4614, -4.1268 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody40"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody40"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody39" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 0.678121, 0.73495, 0, -0.38929, 0.359189, -0.848196, -0.623382, 0.57518, 0.529682, 1.69544, 64.4968, -29.9459 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody39"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody39"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody38" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 69.4136, -11.8626 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody38"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody38"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody37" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 0.678121, 0.73495, 0, -0.38929, 0.359189, -0.848196, -0.623382, 0.57518, 0.529682, 1.69544, 64.4968, -29.9459 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody37"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody37"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody36" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 69.4136, -11.8626 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody36"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody36"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody35" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 0.678121, 0.73495, 0, -0.38929, 0.359189, -0.848196, -0.623382, 0.57518, 0.529682, 1.69544, 64.4968, -29.9459 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody35"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody35"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody82" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 26.9522, -11.8626 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody82"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody82"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody81" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 0.678121, 0.73495, 0, -0.38929, 0.359189, -0.848196, -0.623382, 0.57518, 0.529682, 1.69544, 22.0354, -29.9459 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody81"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody81"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody80" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4.1268 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody80"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody80"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody79" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 0.678121, 0.73495, 0, -0.38929, 0.359189, -0.848196, -0.623382, 0.57518, 0.529682, 1.69544, -4.91677, -22.2101 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody79"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody79"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody78" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 18.8608, -4.1268 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody78"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody78"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody77" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 0.678121, 0.73495, 0, -0.38929, 0.359189, -0.848196, -0.623382, 0.57518, 0.529682, 1.69544, 40.8962, -29.9459 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody77"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody77"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody76" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 45.8129, -11.8626 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody76"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody76"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody75" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 0.678121, 0.73495, 0, -0.38929, 0.359189, -0.848196, -0.623382, 0.57518, 0.529682, 1.69544, 40.8962, -29.9459 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody75"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody75"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody74" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 45.8129, -11.8626 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody74"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody74"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody73" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 0.678121, 0.73495, 0, -0.38929, 0.359189, -0.848196, -0.623382, 0.57518, 0.529682, 1.69544, 40.8962, -29.9459 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody73"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody73"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody72" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 18.8608, -4.1268 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody72"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody72"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody71" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 0.678121, 0.73495, 0, -0.38929, 0.359189, -0.848196, -0.623382, 0.57518, 0.529682, 1.69544, 13.944, -22.2101 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody71"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody71"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody70" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 35.1017, -4.1268 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody70"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody70"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody69" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 0.678121, 0.73495, 0, -0.38929, 0.359189, -0.848196, -0.623382, 0.57518, 0.529682, 1.69544, 57.1371, -29.9459 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody69"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody69"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody68" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 62.0539, -11.8626 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody68"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody68"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody67" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 0.678121, 0.73495, 0, -0.38929, 0.359189, -0.848196, -0.623382, 0.57518, 0.529682, 1.69544, 57.1371, -29.9459 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody67"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody67"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody66" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 62.0539, -11.8626 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody66"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody66"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody65" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 0.678121, 0.73495, 0, -0.38929, 0.359189, -0.848196, -0.623382, 0.57518, 0.529682, 1.69544, 57.1371, -29.9459 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody65"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody65"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody64" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 35.1017, -4.1268 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody64"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody64"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody63" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 0.678121, 0.73495, 0, -0.38929, 0.359189, -0.848196, -0.623382, 0.57518, 0.529682, 1.69544, 30.1849, -22.2101 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody63"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody63"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody62" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 42.4614, -4.1268 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody62"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody62"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody61" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 0.678121, 0.73495, 0, -0.38929, 0.359189, -0.848196, -0.623382, 0.57518, 0.529682, 1.69544, 64.4968, -29.9459 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody61"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody61"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody60" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 69.4136, -11.8626 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody60"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody60"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody59" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 0.678121, 0.73495, 0, -0.38929, 0.359189, -0.848196, -0.623382, 0.57518, 0.529682, 1.69544, 64.4968, -29.9459 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody59"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody59"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody58" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 69.4136, -11.8626 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody58"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody58"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody57" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 0.678121, 0.73495, 0, -0.38929, 0.359189, -0.848196, -0.623382, 0.57518, 0.529682, 1.69544, 64.4968, -29.9459 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody57"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody57"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody108" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 26.9522, -11.8626 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody108"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody108"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody107" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 0.678121, 0.73495, 0, -0.38929, 0.359189, -0.848196, -0.623382, 0.57518, 0.529682, 1.69544, 22.0354, -29.9459 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody107"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody107"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody106" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4.1268 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody106"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody106"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody105" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 0.678121, 0.73495, 0, -0.38929, 0.359189, -0.848196, -0.623382, 0.57518, 0.529682, 1.69544, -4.91677, -22.2101 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody105"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody105"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody104" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 18.8608, -4.1268 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody104"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody104"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody103" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 0.678121, 0.73495, 0, -0.38929, 0.359189, -0.848196, -0.623382, 0.57518, 0.529682, 1.69544, 40.8962, -29.9459 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody103"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody103"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody102" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 45.8129, -11.8626 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody102"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody102"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody101" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 0.678121, 0.73495, 0, -0.38929, 0.359189, -0.848196, -0.623382, 0.57518, 0.529682, 1.69544, 40.8962, -29.9459 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody101"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody101"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody100" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 45.8129, -11.8626 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody100"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody100"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody99" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 0.678121, 0.73495, 0, -0.38929, 0.359189, -0.848196, -0.623382, 0.57518, 0.529682, 1.69544, 40.8962, -29.9459 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody99"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody99"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody98" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 18.8608, -4.1268 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody98"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody98"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody97" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 0.678121, 0.73495, 0, -0.38929, 0.359189, -0.848196, -0.623382, 0.57518, 0.529682, 1.69544, 13.944, -22.2101 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody97"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody97"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody96" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 35.1017, -4.1268 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody96"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody96"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody95" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 0.678121, 0.73495, 0, -0.38929, 0.359189, -0.848196, -0.623382, 0.57518, 0.529682, 1.69544, 57.1371, -29.9459 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody95"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody95"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody94" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 62.0539, -11.8626 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody94"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody94"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody93" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 0.678121, 0.73495, 0, -0.38929, 0.359189, -0.848196, -0.623382, 0.57518, 0.529682, 1.69544, 57.1371, -29.9459 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody93"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody93"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody92" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 62.0539, -11.8626 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody92"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody92"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody91" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 0.678121, 0.73495, 0, -0.38929, 0.359189, -0.848196, -0.623382, 0.57518, 0.529682, 1.69544, 57.1371, -29.9459 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody91"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody91"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody90" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 35.1017, -4.1268 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody90"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody90"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody89" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 0.678121, 0.73495, 0, -0.38929, 0.359189, -0.848196, -0.623382, 0.57518, 0.529682, 1.69544, 30.1849, -22.2101 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody89"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody89"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody88" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 42.4614, -4.1268 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody88"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody88"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody87" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 0.678121, 0.73495, 0, -0.38929, 0.359189, -0.848196, -0.623382, 0.57518, 0.529682, 1.69544, 64.4968, -29.9459 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody87"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody87"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody86" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 69.4136, -11.8626 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody86"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody86"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody85" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 0.678121, 0.73495, 0, -0.38929, 0.359189, -0.848196, -0.623382, 0.57518, 0.529682, 1.69544, 64.4968, -29.9459 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody85"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody85"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody84" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 69.4136, -11.8626 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody84"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody84"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody83" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 0.678121, 0.73495, 0, -0.38929, 0.359189, -0.848196, -0.623382, 0.57518, 0.529682, 1.69544, 64.4968, -29.9459 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody83"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody83"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody134" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 26.9522, -11.8626 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody134"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody134"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody133" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 0.678121, 0.73495, 0, -0.38929, 0.359189, -0.848196, -0.623382, 0.57518, 0.529682, 1.69544, 22.0354, -29.9459 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody133"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody133"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody132" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4.1268 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody132"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody132"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody131" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 0.678121, 0.73495, 0, -0.38929, 0.359189, -0.848196, -0.623382, 0.57518, 0.529682, 1.69544, -4.91677, -22.2101 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody131"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody131"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody130" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 18.8608, -4.1268 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody130"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody130"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody129" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 0.678121, 0.73495, 0, -0.38929, 0.359189, -0.848196, -0.623382, 0.57518, 0.529682, 1.69544, 40.8962, -29.9459 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody129"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody129"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody128" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 45.8129, -11.8626 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody128"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody128"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody127" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 0.678121, 0.73495, 0, -0.38929, 0.359189, -0.848196, -0.623382, 0.57518, 0.529682, 1.69544, 40.8962, -29.9459 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody127"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody127"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody126" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 45.8129, -11.8626 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody126"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody126"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody125" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 0.678121, 0.73495, 0, -0.38929, 0.359189, -0.848196, -0.623382, 0.57518, 0.529682, 1.69544, 40.8962, -29.9459 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody125"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody125"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody124" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 18.8608, -4.1268 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody124"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody124"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody123" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 0.678121, 0.73495, 0, -0.38929, 0.359189, -0.848196, -0.623382, 0.57518, 0.529682, 1.69544, 13.944, -22.2101 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody123"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody123"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody122" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 35.1017, -4.1268 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody122"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody122"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody121" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 0.678121, 0.73495, 0, -0.38929, 0.359189, -0.848196, -0.623382, 0.57518, 0.529682, 1.69544, 57.1371, -29.9459 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody121"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody121"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody120" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 62.0539, -11.8626 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody120"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody120"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody119" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 0.678121, 0.73495, 0, -0.38929, 0.359189, -0.848196, -0.623382, 0.57518, 0.529682, 1.69544, 57.1371, -29.9459 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody119"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody119"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody118" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 62.0539, -11.8626 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody118"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody118"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody117" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 0.678121, 0.73495, 0, -0.38929, 0.359189, -0.848196, -0.623382, 0.57518, 0.529682, 1.69544, 57.1371, -29.9459 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody117"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody117"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody116" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 35.1017, -4.1268 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody116"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody116"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody115" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 0.678121, 0.73495, 0, -0.38929, 0.359189, -0.848196, -0.623382, 0.57518, 0.529682, 1.69544, 30.1849, -22.2101 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody115"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody115"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody114" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 42.4614, -4.1268 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody114"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody114"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody113" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 0.678121, 0.73495, 0, -0.38929, 0.359189, -0.848196, -0.623382, 0.57518, 0.529682, 1.69544, 64.4968, -29.9459 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody113"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody113"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody112" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 69.4136, -11.8626 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody112"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody112"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody111" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 0.678121, 0.73495, 0, -0.38929, 0.359189, -0.848196, -0.623382, 0.57518, 0.529682, 1.69544, 64.4968, -29.9459 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody111"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody111"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody110" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 69.4136, -11.8626 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody110"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody110"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody109" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 0.678121, 0.73495, 0, -0.38929, 0.359189, -0.848196, -0.623382, 0.57518, 0.529682, 1.69544, 64.4968, -29.9459 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody109"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody109"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody160" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 10.9804, 26.9522, -11.8626 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody160"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody160"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody159" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 0.678121, 0.73495, 0, -0.38929, 0.359189, -0.848196, -0.623382, 0.57518, 0.529682, 12.6759, 22.0354, -29.9459 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody159"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody159"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody158" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 10.9804, 0, -4.1268 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody158"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody158"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody157" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 0.678121, 0.73495, 0, -0.38929, 0.359189, -0.848196, -0.623382, 0.57518, 0.529682, 12.6759, -4.91677, -22.2101 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody157"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody157"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody156" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 10.9804, 18.8608, -4.1268 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody156"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody156"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody155" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 0.678121, 0.73495, 0, -0.38929, 0.359189, -0.848196, -0.623382, 0.57518, 0.529682, 12.6759, 40.8962, -29.9459 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody155"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody155"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody154" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 10.9804, 45.8129, -11.8626 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody154"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody154"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody153" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 0.678121, 0.73495, 0, -0.38929, 0.359189, -0.848196, -0.623382, 0.57518, 0.529682, 12.6759, 40.8962, -29.9459 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody153"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody153"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody152" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 10.9804, 45.8129, -11.8626 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody152"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody152"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody151" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 0.678121, 0.73495, 0, -0.38929, 0.359189, -0.848196, -0.623382, 0.57518, 0.529682, 12.6759, 40.8962, -29.9459 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody151"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody151"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody150" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 10.9804, 18.8608, -4.1268 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody150"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody150"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody149" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 0.678121, 0.73495, 0, -0.38929, 0.359189, -0.848196, -0.623382, 0.57518, 0.529682, 12.6759, 13.944, -22.2101 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody149"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody149"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody148" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 10.9804, 35.1017, -4.1268 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody148"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody148"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody147" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 0.678121, 0.73495, 0, -0.38929, 0.359189, -0.848196, -0.623382, 0.57518, 0.529682, 12.6759, 57.1371, -29.9459 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody147"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody147"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody146" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 10.9804, 62.0539, -11.8626 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody146"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody146"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody145" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 0.678121, 0.73495, 0, -0.38929, 0.359189, -0.848196, -0.623382, 0.57518, 0.529682, 12.6759, 57.1371, -29.9459 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody145"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody145"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody144" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 10.9804, 62.0539, -11.8626 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody144"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody144"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody143" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 0.678121, 0.73495, 0, -0.38929, 0.359189, -0.848196, -0.623382, 0.57518, 0.529682, 12.6759, 57.1371, -29.9459 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody143"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody143"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody142" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 10.9804, 35.1017, -4.1268 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody142"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody142"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody141" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 0.678121, 0.73495, 0, -0.38929, 0.359189, -0.848196, -0.623382, 0.57518, 0.529682, 12.6759, 30.1849, -22.2101 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody141"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody141"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody140" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 10.9804, 42.4614, -4.1268 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody140"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody140"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody139" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 0.678121, 0.73495, 0, -0.38929, 0.359189, -0.848196, -0.623382, 0.57518, 0.529682, 12.6759, 64.4968, -29.9459 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody139"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody139"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody138" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 10.9804, 69.4136, -11.8626 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody138"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody138"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody137" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 0.678121, 0.73495, 0, -0.38929, 0.359189, -0.848196, -0.623382, 0.57518, 0.529682, 12.6759, 64.4968, -29.9459 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody137"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody137"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody136" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 10.9804, 69.4136, -11.8626 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody136"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody136"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody135" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 0.678121, 0.73495, 0, -0.38929, 0.359189, -0.848196, -0.623382, 0.57518, 0.529682, 12.6759, 64.4968, -29.9459 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody135"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody135"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody34" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 42.4614, -4.1268 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody34"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody34"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody33" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 0.678121, 0.73495, 0, -0.38929, 0.359189, -0.848196, -0.623382, 0.57518, 0.529682, 1.69544, 37.5446, -22.2101 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody33"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody33"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody48" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -6.60717, 42.4614, -4.1268 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody48"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody48"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody47" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 0.678121, 0.73495, 0, -0.38929, 0.359189, -0.848196, -0.623382, 0.57518, 0.529682, -4.91173, 64.4968, -29.9459 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody47"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody47"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody46" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -6.60717, 69.4136, -11.8626 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody46"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody46"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody45" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 0.678121, 0.73495, 0, -0.38929, 0.359189, -0.848196, -0.623382, 0.57518, 0.529682, -4.91173, 64.4968, -29.9459 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody45"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody45"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody44" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -6.60717, 69.4136, -11.8626 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody44"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody44"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody43" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 0.678121, 0.73495, 0, -0.38929, 0.359189, -0.848196, -0.623382, 0.57518, 0.529682, -4.91173, 64.4968, -29.9459 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody43"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody43"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody42" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -6.60717, 42.4614, -4.1268 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody42"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody42"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody41" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 0.678121, 0.73495, 0, -0.38929, 0.359189, -0.848196, -0.623382, 0.57518, 0.529682, -4.91173, 37.5446, -22.2101 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody41"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody41"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody56" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -6.60717, 26.7903, -4.1268 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody56"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody56"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody55" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 0.678121, 0.73495, 0, -0.38929, 0.359189, -0.848196, -0.623382, 0.57518, 0.529682, -4.91173, 48.8257, -29.9459 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody55"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody55"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody54" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -6.60717, 53.7424, -11.8626 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody54"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody54"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody53" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 0.678121, 0.73495, 0, -0.38929, 0.359189, -0.848196, -0.623382, 0.57518, 0.529682, -4.91173, 48.8257, -29.9459 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody53"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody53"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody52" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -6.60717, 53.7424, -11.8626 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody52"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody52"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody51" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 0.678121, 0.73495, 0, -0.38929, 0.359189, -0.848196, -0.623382, 0.57518, 0.529682, -4.91173, 48.8257, -29.9459 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody51"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody51"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody50" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -6.60717, 26.7903, -4.1268 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody50"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody50"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="WindBlownBody49" type="RigidBody" parent="Affected Bodies" groups=[
+"wind",
+]]
+transform = Transform( 0.678121, 0.73495, 0, -0.38929, 0.359189, -0.848196, -0.623382, 0.57518, 0.529682, -4.91173, 21.8735, -22.2101 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="Affected Bodies/WindBlownBody49"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="Affected Bodies/WindBlownBody49"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 5 )
+
+[node name="NotAffectedB" type="RigidBody" parent="." groups=[
+"blocksWind",
+]]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -8.02064, 15.6557, -9.07109 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="NotAffectedB"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="NotAffectedB"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 6 )
+
+[node name="NotAffectedB3" type="RigidBody" parent="." groups=[
+"blocksWind",
+]]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -12.9545, 15.6557, 12.8574 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="NotAffectedB3"]
+shape = SubResource( 3 )
+
+[node name="MeshInstance" type="MeshInstance" parent="NotAffectedB3"]
+mesh = SubResource( 4 )
+material/0 = SubResource( 6 )
+
+[node name="NotAffectedB2" type="RigidBody" parent="." groups=[
+"blocksWind",
+]]
+transform = Transform( 0.999612, 0.0223586, 0.0166371, 0, 0.596967, -0.802266, -0.0278693, 0.801954, 0.596735, -8.4947, 7.99113, 2.47612 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="NotAffectedB2"]
+shape = SubResource( 7 )
+
+[node name="MeshInstance" type="MeshInstance" parent="NotAffectedB2"]
+transform = Transform( 12.027, 0, 0, 0, 1, 0, 0, 0, 10.866, 0, 0, 0 )
+mesh = SubResource( 4 )
+material/0 = SubResource( 6 )
+
+[node name="NotAffectedB4" type="RigidBody" parent="." groups=[
+"blocksWind",
+]]
+transform = Transform( 0.999612, 0.0223586, 0.0166371, 0, 0.596967, -0.802266, -0.0278693, 0.801954, 0.596735, -8.4947, 83.8654, 2.47612 )
+mass = 25.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2" type="CollisionShape" parent="NotAffectedB4"]
+shape = SubResource( 7 )
+
+[node name="MeshInstance" type="MeshInstance" parent="NotAffectedB4"]
+transform = Transform( 12.027, 0, 0, 0, 1, 0, 0, 0, 10.866, 0, 0, 0 )
+mesh = SubResource( 4 )
+material/0 = SubResource( 6 )
+
+[node name="Body" type="StaticBody" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.228488, 0 )
+
+[node name="floor" type="MeshInstance" parent="Body"]
+mesh = SubResource( 9 )
+material/0 = null
+
+[node name="CollisionShape" type="CollisionShape" parent="Body"]
+shape = SubResource( 10 )
+
+[node name="Camera" type="Camera" parent="."]
+transform = Transform( 0.0806338, -0.363834, 0.927967, 0, 0.930999, 0.365023, -0.996744, -0.0294332, 0.0750699, 46.4195, 39.9464, 3.54898 )
+current = true
+far = 1000.0
+[connection signal="body_entered" from="SimpleWindArea" to="SimpleWindArea" method="_on_WindArea_body_entered"]
+[connection signal="body_exited" from="SimpleWindArea" to="SimpleWindArea" method="_on_WindArea_body_exited"]
